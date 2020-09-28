@@ -11,13 +11,15 @@ public class TwoSums {
     Because nums[0] + nums[1] = 2 + 7 = 9.*/
 
     public static int[] twoSum(int[] nums, int target) {
-        /*for(int i=0,j=1; i<nums.length && j<nums.length;i++,j++) {
+        /* Brute Force Approach: Complexity O(n^2)
+        for(int i=0,j=1; i<nums.length && j<nums.length;i++,j++) {
             if(nums[i] + nums[j] == target) {
                 indicies_array[0]=i;
                 indicies_array[1]=j;
             }
         }*/
 
+        //Efficient: Complexity O(n)
         Map<Integer, Integer> numMap = new HashMap<>();
         for (int i = 0; i < nums.length; i++) {
             int complement = target - nums[i];
