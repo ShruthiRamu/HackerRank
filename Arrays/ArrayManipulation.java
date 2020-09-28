@@ -39,7 +39,7 @@ public class ArrayManipulation {
             result_array[b]-=k;
         }
 
-
+        //prefix sum algorithm
         long sum = 0;
         long max = 0;
         for (int i = 0; i < n; i++) {
