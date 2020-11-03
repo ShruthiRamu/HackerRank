@@ -287,6 +287,25 @@ public class ListNode {
             return count;
       }
 
+      public static ListNode insertSorted(ListNode head, int data) {
+            ListNode prev=head, curr=head;
+            ListNode newNode = new ListNode();
+            newNode.val=data;
+            newNode.next=null;
+            if(head==null) {
+                  return newNode;
+            }
+
+            while(curr!=null && curr.val < newNode.val){
+                  prev=curr;
+                  curr=curr.next;
+            }
+
+            prev.next=newNode;
+            newNode.next=curr;
+            return head;
+      }
+
       private static final Scanner scanner = new Scanner(System.in);
 
       public static void main(String[] args) throws IOException {
@@ -310,6 +329,7 @@ public class ListNode {
             head = insertEnd(4,head);
             head = insertFront(5,head);
 
+
             traverseList(head);
             System.out.println("Length of list: " + length(head));
 
@@ -332,6 +352,14 @@ public class ListNode {
 
             ListNode nthNode=findNthNodeFromEnd(head, 1);
             System.out.println(nthNode.val);
+
+            System.out.println("Creating linked list sorted: ");
+            ListNode head1 = insertSorted(null,7);
+            head1 = insertSorted(head1,2);
+            head1 = insertSorted(head1,1);
+            head1 = insertSorted(head1,3);
+            head1 = insertSorted(head1,4);
+            traverseList(head1);
 
             scanner.close();
       }
