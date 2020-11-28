@@ -306,6 +306,205 @@ public class ListNode {
             return head;
       }
 
+      public static ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+            ListNode returnNode = new ListNode(-1);
+            ListNode headNode = returnNode;
+            while (l1 != null && l2 != null) {
+                  if (l1.val <= l2.val) {
+                        returnNode.next = l1;
+                        l1 = l1.next;
+                  } else {
+                        returnNode.next = l2;
+                        l2 = l2.next;
+                  }
+                  returnNode = returnNode.next;
+            }
+            if (l1 == null) {
+                  returnNode.next = l2;
+            } else if (l2 == null) {
+                  returnNode.next = l1;
+            }
+            return headNode.next;
+      }
+
+      /*
+      You are given an array of k linked-lists lists, each linked-list is sorted in ascending order.
+
+Merge all the linked-lists into one sorted linked-list and return it.
+
+
+
+Example 1:
+
+Input: lists = [[1,4,5],[1,3,4],[2,6]]
+Output: [1,1,2,3,4,4,5,6]
+Explanation: The linked-lists are:
+[
+  1->4->5,
+  1->3->4,
+  2->6
+]
+merging them into one sorted list:
+1->1->2->3->4->4->5->6
+Example 2:
+
+Input: lists = []
+Output: []
+Example 3:
+
+Input: lists = [[]]
+Output: []
+       */
+      public ListNode mergeKLists(ListNode[] lists) {
+            if(lists == null || lists.length == 0) return null;
+            int len = lists.length;                 //no extra memory, decrease end of lists each time when merge two
+            while(len != 1){
+                  for(int i = 0;i<len/2;i++){
+                        lists[i] = mergeTwo(lists[i*2],lists[i*2+1]);
+                  }
+                  if(len % 2 == 1){                   //move the last one
+                        lists[len/2] = lists[len-1];
+                  }
+                  len = (len+1)/2;                    //decrease to half
+            }
+            return lists[0];
+      }
+
+      private ListNode mergeTwo(ListNode node1, ListNode node2){
+            if(node1 == null) return node2;
+            if(node2 == null) return node1;
+            ListNode dummy = new ListNode(0);
+            ListNode curr = dummy;
+            while(node1 != null || node2 != null){
+                  if(node2 == null || node1 != null && node1.val < node2.val){
+                        curr.next = node1;
+                        node1 = node1.next;
+                  }else{
+                        curr.next = node2;
+                        node2 = node2.next;
+                  }
+                  curr = curr.next;
+            }
+            return dummy.next;
+      }
+      /*
+      Serialization is the process of converting a data structure or object into a sequence of bits so that it can be stored in a file or memory buffer, or transmitted across a network connection link to be reconstructed later in the same or another computer environment.
+
+Design an algorithm to serialize and deserialize a binary tree. There is no restriction on how your serialization/deserialization algorithm should work. You just need to ensure that a binary tree can be serialized to a string and this string can be deserialized to the original tree structure.
+
+Clarification: The input/output format is the same as how LeetCode serializes a binary tree. You do not necessarily need to follow this format, so please be creative and come up with different approaches yourself.
+
+
+
+Example 1:
+
+
+Input: root = [1,2,3,null,null,4,5]
+Output: [1,2,3,null,null,4,5]
+Example 2:
+
+Input: root = []
+Output: []
+Example 3:
+
+Input: root = [1]
+Output: [1]
+Example 4:
+
+Input: root = [1,2]
+Output: [1,2]
+
+       */
+      /**
+
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+
+      public class Codec {
+            private static final String spliter = ",";
+            private static final String NN = "X";
+
+            // Encodes a tree to a single string.
+            public String serialize(TreeNode root) {
+                  StringBuilder sb = new StringBuilder();
+                  buildString(root, sb);
+                  return sb.toString();
+            }
+
+            private void buildString(TreeNode node, StringBuilder sb) {
+                  if (node == null) {
+                        sb.append(NN).append(spliter);
+                  } else {
+                        sb.append(node.val).append(spliter);
+                        buildString(node.left, sb);
+                        buildString(node.right,sb);
+                  }
+            }
+            // Decodes your encoded data to tree.
+            public TreeNode deserialize(String data) {
+                  Deque<String> nodes = new LinkedList<>();
+                  nodes.addAll(Arrays.asList(data.split(spliter)));
+                  return buildTree(nodes);
+            }
+
+            private TreeNode buildTree(Deque<String> nodes) {
+                  String val = nodes.remove();
+                  if (val.equals(NN)) return null;
+                  else {
+                        TreeNode node = new TreeNode(Integer.valueOf(val));
+                        node.left = buildTree(nodes);
+                        node.right = buildTree(nodes);
+                        return node;
+                  }
+            }
+      }
+*/
+// Your Codec object will be instantiated and called as such:
+// Codec ser = new Codec();
+// Codec deser = new Codec();
+// TreeNode ans = deser.deserialize(ser.serialize(root));
+
+
+      public ListNode rotateRight(ListNode head, int n) {
+            /*
+            Input: 1->2->3->4->5->NULL, k = 2
+Output: 4->5->1->2->3->NULL
+Explanation:
+rotate 1 steps to the right: 5->1->2->3->4->NULL
+rotate 2 steps to the right: 4->5->1->2->3->NULL
+Example 2:
+
+Input: 0->1->2->NULL, k = 4
+Output: 2->0->1->NULL
+Explanation:
+rotate 1 steps to the right: 2->0->1->NULL
+rotate 2 steps to the right: 1->2->0->NULL
+rotate 3 steps to the right: 0->1->2->NULL
+rotate 4 steps to the right: 2->0->1->NULL
+             */
+            if (head==null||head.next==null) return head;
+            ListNode dummy=new ListNode(0);
+            dummy.next=head;
+            ListNode fast=dummy,slow=dummy;
+
+            int i;
+            for (i=0;fast.next!=null;i++)//Get the total length
+                  fast=fast.next;
+
+            for (int j=i-n%i;j>0;j--) //Get the i-n%i th node
+                  slow=slow.next;
+
+            fast.next=dummy.next; //Do the rotation
+            dummy.next=slow.next;
+            slow.next=null;
+
+            return dummy.next;
+      }
       private static final Scanner scanner = new Scanner(System.in);
 
       public static void main(String[] args) throws IOException {
